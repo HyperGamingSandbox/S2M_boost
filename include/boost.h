@@ -10,7 +10,6 @@ typedef void *(*boost_atomic_sint_new__)(short int);
 typedef void (*boost_atomic_sint_delete__)(void *);
 #define boost_atomic_sint_delete_ ((boost_atomic_sint_delete__)FuncTable_boost[1])
 
-
 typedef short int  (*boost_atomic_sint_fetch_add__)(void *at, short b, boost::memory_order c);
 #define boost_atomic_sint_fetch_add_ ((boost_atomic_sint_fetch_add__)FuncTable_boost[2])
 
