@@ -2,7 +2,7 @@
 x64
 Debug
 *.dll
-!build/release/*.dll
+!builds/release/*.dll
 *.ilk
 *.iobj
 *.ipdb
