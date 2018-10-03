@@ -1,7 +1,8 @@
 .vs
 x64
 Debug
-./*.dll
+*.dll
+!build/release/*.dll
 *.ilk
 *.iobj
 *.ipdb
