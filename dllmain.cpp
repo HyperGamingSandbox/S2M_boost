@@ -3,6 +3,7 @@
 #include "Seed2.0\Seed2.0.cpp"
 
 #include <boost\atomic.hpp>
+#include <boost/thread/shared_mutex.hpp>
 
 BOOL APIENTRY DllMain( HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved ) {
     switch (ul_reason_for_call) {
@@ -38,6 +39,26 @@ void boost_atomic_thread_fence(boost::memory_order c) {
 	boost::atomic_thread_fence(c);
 }
 
+void *boost_thread_new_shared_mutex() {
+	return new boost::shared_mutex();
+}
+
+void boost_thread_shared_mutex_lock(void *v) {
+	auto l = (boost::shared_mutex *)v;
+	l->lock();
+}
+void boost_thread_shared_mutex_lock_shared(void *v) {
+	auto l = (boost::shared_mutex *)v;
+	l->lock_shared();
+}
+void boost_thread_shared_mutex_unlock(void *v) {
+	auto l = (boost::shared_mutex *)v;
+	l->unlock();
+}
+void boost_thread_shared_mutex_unlock_shared(void *v) {
+	auto l = (boost::shared_mutex *)v;
+	l->unlock_shared();
+}
 
 void funcTable_copy(void **tbl) {
 	tbl[0] = boost_atomic_sint_new;
@@ -45,6 +66,12 @@ void funcTable_copy(void **tbl) {
 	tbl[2] = boost_atomic_sint_fetch_add;
 	tbl[3] = boost_atomic_sint_fetch_sub;
 	tbl[4] = boost_atomic_thread_fence;
+
+	tbl[5] = boost_thread_new_shared_mutex;
+	tbl[6] = boost_thread_shared_mutex_lock;
+	tbl[7] = boost_thread_shared_mutex_lock_shared;
+	tbl[8] = boost_thread_shared_mutex_unlock;
+	tbl[9] = boost_thread_shared_mutex_unlock_shared;
 }
 
 EXPORT_DLL int luaC_funcTable(lua_State *L) {

@@ -3,6 +3,7 @@
 void *FuncTable_boost[] = {
 	0, 0, 0, 0
    ,0, 0, 0, 0
+   ,0, 0, 0, 0
 };
 
 EXPORT_DLL int luaC_setupFuncTableFor_boost(lua_State *L) {
