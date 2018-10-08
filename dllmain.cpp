@@ -3,6 +3,7 @@
 #include "Seed2.0\Seed2.0.cpp"
 
 #include <boost\atomic.hpp>
+#include <boost/thread.hpp>
 #include <boost/thread/shared_mutex.hpp>
 
 BOOL APIENTRY DllMain( HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved ) {
@@ -15,6 +16,11 @@ BOOL APIENTRY DllMain( HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpRese
     }
     return TRUE;
 }
+
+void boost_thread_yield() {
+	boost::thread::yield();
+}
+
 
 void *boost_atomic_sint_new(short int c) {
 	return new boost::atomic<short int>(c);
@@ -41,6 +47,11 @@ void boost_atomic_thread_fence(boost::memory_order c) {
 
 void *boost_thread_new_shared_mutex() {
 	return new boost::shared_mutex();
+}
+
+void boost_thread_delete_shared_mutex(void *v) {
+	auto l = (boost::shared_mutex *)v;
+	delete l;
 }
 
 void boost_thread_shared_mutex_lock(void *v) {
@@ -72,6 +83,9 @@ void funcTable_copy(void **tbl) {
 	tbl[7] = boost_thread_shared_mutex_lock_shared;
 	tbl[8] = boost_thread_shared_mutex_unlock;
 	tbl[9] = boost_thread_shared_mutex_unlock_shared;
+	tbl[10]= boost_thread_delete_shared_mutex;
+
+	tbl[11]= boost_thread_yield;
 }
 
 EXPORT_DLL int luaC_funcTable(lua_State *L) {
